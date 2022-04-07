@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Shop.API.Repository;
 using Shop.API.Models;
@@ -37,7 +38,70 @@ namespace Shop.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> CreateProduct(Product product)
+        {
+            try
+            {
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                return StatusCode(201, "Product create");
+            }
+            catch (System.Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProduct([FromBody]int id)
+        {
+            try
+            {
+
+                var product = await _context.Products.FindAsync(id);
+                if (product == null)
+                {
+                    return StatusCode(404, "Sorry bro");
+                }
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+
+                return StatusCode(200, product);
+
+            }
+            catch (System.Exception e)
+            {
+
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateProduct(int id, Product product)
+        {
+            if (id != product.Id)
+            {
+                return StatusCode(400, "Not the same product");
+            }
+
+            _context.Entry(product).State = EntityState.Modified;
+            // _context.Products.Update(product);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return StatusCode(202, product);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, "Something went wrong");
+                throw;
+            }
+        }
 
     }
 
