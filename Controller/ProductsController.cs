@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Shop.API.Repository;
@@ -72,30 +73,34 @@ namespace Shop.API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<ObjectResult> UpdateProduct(int id, Product product)
-        {
-            if (id != product.Id)
-            {
-                return StatusCode(400, "Not the same product");
-
-            }
-            if (await _context.Products.FindAsync(id) == null)
-            {
-                return StatusCode(400, "Not found");
-            }
-            // _context.Entry(product).State = EntityState.Modified;
-            _context.Products.Update(product);
-            try
-            {
-                await _context.SaveChangesAsync();
-                return StatusCode(200, product);
-            }catch(System.Exception)
-            {
+                Console.WriteLine(e);
                 return StatusCode(500, "Something went wrong");
             }
         }
 
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateProduct(int id, Product product)
+        {
+            if (id != product.Id)
+            {
+                return StatusCode(400, "Not the same product");
+            }
+
+            _context.Entry(product).State = EntityState.Modified;
+            // _context.Products.Update(product);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return StatusCode(202, product);
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, "Something went wrong");
+                throw;
+            }
+        }
 
     }
 
