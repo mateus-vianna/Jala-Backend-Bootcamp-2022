@@ -1,3 +1,11 @@
 # Welcome guys to our first Brazilian bootcamp
 
-## There will be stuff here :P
+## To do
+
+1. Create Stock controller with all crud methods
+
+2. Create Stock model
+
+3. Associate stock model to product model
+
+4. Insert at least stock for the 33 available products
