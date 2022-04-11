@@ -2,7 +2,7 @@
 
 ## To do
 
-1. Create Stock controller with all crud methods
+1. Create Stock controller with all CRUD methods
 
 2. Create Stock model
 

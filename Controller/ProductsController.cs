@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
 using Shop.API.Repository;
 using Shop.API.Models;
 
@@ -27,8 +26,8 @@ namespace Shop.API.Controllers
             return Ok(_context.Products.ToList());
         }
 
-        [HttpGet("/api/{id}")]
-        public async Task<ActionResult<Product>> GetById(int id)
+        [HttpGet("/api/Products/{id}")]
+        public async Task<ActionResult<Product>> GetById([FromRoute] int id)
         {
             var result = await _context.Products.FindAsync(id);
             if (result == null)
@@ -39,11 +38,12 @@ namespace Shop.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateProduct(Product product)
+        public async Task<ActionResult> CreateProduct([FromBody] Product product)
         {
             try
             {
-                _context.Products.Add(product);
+                // if (ModelState.IsValid)
+                //     _context.Products.Add(product);
                 await _context.SaveChangesAsync();
                 return StatusCode(201, "Product create");
             }
@@ -55,7 +55,7 @@ namespace Shop.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteProduct([FromBody]int id)
+        public async Task<ActionResult> DeleteProduct(int id)
         {
             try
             {
