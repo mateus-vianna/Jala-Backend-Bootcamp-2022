@@ -2,10 +2,12 @@
 
 ## To do
 
-1. Create Stock controller with all CRUD methods
+1 - Criar um método para cada operação CRUD
+nas business (stock e Product) correspondente com pelo menos uma regra
+para cada um deles.
 
-2. Create Stock model
+2 - Transferir a chamada do contexto para a business correspondente e realizar tal chamada na business.
 
-3. Associate stock model to product model
+3 - Inserir pelo menos uma regra de negócio em cada método criado.
 
-4. Insert at least stock for the 33 available products
+4 - Criar todo o fluxo para o Price.
