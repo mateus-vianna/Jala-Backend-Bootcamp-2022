@@ -2,12 +2,18 @@
 
 ## To do
 
-1 - Criar um método para cada operação CRUD
-nas business (stock e Product) correspondente com pelo menos uma regra
-para cada um deles.
+1 - Create CRUD operations on business modules for Stock and Product, with at least one business logic on each method
 
-2 - Transferir a chamada do contexto para a business correspondente e realizar tal chamada na business.
+2 - Remove context call from controller and move it into business classes
 
-3 - Inserir pelo menos uma regra de negócio em cada método criado.
+3 - Create controller, business, model and context for Price entity
 
-4 - Criar todo o fluxo para o Price.
+## Done
+
+1 - Create Stock controller with all CRUD methods
+
+2 - Create Stock model
+
+3 - Associate stock model to product model
+
+4 - Insert at least one stock obj to the 33 already available products
