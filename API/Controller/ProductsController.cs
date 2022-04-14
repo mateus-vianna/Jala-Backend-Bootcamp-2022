@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Shop.API.Repository;
 using Shop.API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Shop.API.Controllers
 {
@@ -42,8 +43,8 @@ namespace Shop.API.Controllers
         {
             try
             {
-                // if (ModelState.IsValid)
-                //     _context.Products.Add(product);
+
+                _context.Products.Add(product);
                 await _context.SaveChangesAsync();
                 return StatusCode(201, "Product create");
             }
