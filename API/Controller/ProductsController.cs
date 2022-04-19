@@ -1,8 +1,7 @@
-using Shop.API.Repository;
+
 using Shop.API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
+using Shop.API.Business;
 
 namespace Shop.API.Controllers
 {
@@ -12,30 +11,52 @@ namespace Shop.API.Controllers
     public class ProductsController : ControllerBase
     {
 
-        private readonly ShopContext _context;
 
-        public ProductsController(ShopContext context)
+        public readonly IProductBusiness _productBusiness;
+        public ProductsController(IProductBusiness productBusiness)
         {
-            _context = context;
-            _context.Database.EnsureCreated();
+            _productBusiness = productBusiness;
         }
 
 
         [HttpGet]
         public ActionResult<IEnumerable<Product>> GetAll()
         {
-            return Ok(_context.Products.ToList());
+
+            try
+            {
+                var result = _productBusiness.GetAll();
+                if (result == null || !result.Any())
+                {
+                    return NoContent();
+                }
+
+                return Ok(result);
+            }
+            catch (System.Exception e)
+            {
+
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong");
+            }
+
         }
 
         [HttpGet("/api/Products/{id}")]
         public async Task<ActionResult<Product>> GetById([FromRoute] int id)
         {
-            var result = await _context.Products.FindAsync(id);
-            if (result == null)
+            try
             {
-                return NotFound();
+                var result = await _productBusiness.GetById(id);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (System.Exception e)
+            {
+
+                Console.WriteLine(e);
+                return StatusCode(500, "Something went wrong");
+            }
+
         }
 
         [HttpPost]
@@ -43,10 +64,8 @@ namespace Shop.API.Controllers
         {
             try
             {
-
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-                return StatusCode(201, "Product create");
+                var result = await _productBusiness.CreateProduct(product);
+                return StatusCode(201, result);
             }
             catch (System.Exception e)
             {
@@ -60,16 +79,7 @@ namespace Shop.API.Controllers
         {
             try
             {
-
-                var product = await _context.Products.FindAsync(id);
-                if (product == null)
-                {
-                    return StatusCode(404, "Sorry bro");
-                }
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
-
-                return StatusCode(200, product);
+                return StatusCode(200, await _productBusiness.DeleteById(id));
 
             }
             catch (System.Exception e)
@@ -88,19 +98,14 @@ namespace Shop.API.Controllers
             {
                 return StatusCode(400, "Not the same product");
             }
-
-            _context.Entry(product).State = EntityState.Modified;
-            // _context.Products.Update(product);
-
             try
             {
-                await _context.SaveChangesAsync();
-                return StatusCode(202, product);
+                return StatusCode(201, await _productBusiness.UpdateProduct(product));
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
+                Console.WriteLine(e);
                 return StatusCode(500, "Something went wrong");
-                throw;
             }
         }
 

@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Shop.API.Business;
 using Shop.API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IProductBusiness, ProductBusiness>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddControllers();
 // Add services to the container.
