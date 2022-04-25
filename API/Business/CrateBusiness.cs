@@ -13,8 +13,7 @@ public class CrateBusiness
 
     public Crate AddToCart(Crate crate)
     {
-
-        return _CrateRepository.AddToCart(crate);
+        return crate;
     }
 
 }
